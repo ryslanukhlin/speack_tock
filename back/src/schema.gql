@@ -1,0 +1,32 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AuthInput {
+  password: String!
+  phone: String!
+}
+
+type Mutation {
+  loginUser(authInput: AuthInput!): TokenType!
+  registerUser(userInput: UserInput!): User!
+}
+
+type Query {
+  hellow: String!
+}
+
+type TokenType {
+  access_token: String!
+}
+
+type User {
+  id: ID!
+  password: String!
+  phone: String!
+}
+
+input UserInput {
+  password: String!
+  phone: String!
+}

@@ -45,6 +45,10 @@
     .loader {
         @apply lodaeAnimate fixed right-1 top-1  ease-linear rounded-full border-4 border-gray-200 h-5 w-5;
     }
+
+    .line {
+        @apply w-full h-[1px] bg-gray-200;
+    }
 }
 
 @media (max-height: 800px) {

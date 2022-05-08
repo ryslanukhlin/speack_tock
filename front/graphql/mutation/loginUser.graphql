@@ -1,0 +1,5 @@
+mutation loginUser($phone: String!, $password: String!) {
+    loginUser(authInput: { phone: $phone, password: $password }) {
+        access_token
+    }
+}

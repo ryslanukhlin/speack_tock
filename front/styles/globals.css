@@ -26,6 +26,14 @@
         @apply bg-gray-50 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2;
     }
 
+    .error {
+        @apply ring-1 ring-pink-500 text-pink-500 focus:ring-pink-500 focus:text-pink-500 focus:border-pink-500;
+    }
+
+    .errorTxt {
+        @apply mt-[2px] text-pink-600 h-[18px] text-[13px];
+    }
+
     .input-check {
         @apply form-checkbox focus:ring-0 outline-none rounded-md bg-white border-gray-300 text-indigo-500 mr-2;
     }
@@ -33,10 +41,38 @@
     .button {
         @apply bg-indigo-500 text-white uppercase rounded-md text-xs hover:bg-indigo-700 active:bg-indigo-800 transition duration-150 ease-in-out;
     }
+
+    .loader {
+        @apply lodaeAnimate fixed right-1 top-1  ease-linear rounded-full border-4 border-gray-200 h-5 w-5;
+    }
 }
 
 @media (max-height: 800px) {
     .disabled-small-height {
         display: none;
+    }
+}
+
+.lodaeAnimate {
+    border-top-color: #3498db;
+    -webkit-animation: spinner 1.5s linear infinite;
+    animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

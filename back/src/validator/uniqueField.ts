@@ -20,6 +20,6 @@ export class UniqueFieldValidator implements ValidatorConstraintInterface {
     }
 
     defaultMessage?(validationArguments?: ValidationArguments): string {
-        return 'this ' + validationArguments.property + ' is register';
+        return validationArguments.property + ' is register';
     }
 }

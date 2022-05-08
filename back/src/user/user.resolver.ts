@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UsePipes } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from 'src/auth/auth.service';
 import { CurrentUser } from 'src/decorator/currentUser.decorator';
@@ -18,10 +18,10 @@ export class UserResolver {
         private readonly authService: AuthService,
     ) {}
 
-    @Query(() => String)
+    @Query(() => User)
     @UseGuards(JwtAuthGuard)
-    hellow() {
-        return 'hellow';
+    getUser(@CurrentUser() userPayload: UserPayload) {
+        return this.userService.findOneField(userPayload.id, 'id');
     }
 
     @Mutation(() => TokenType)

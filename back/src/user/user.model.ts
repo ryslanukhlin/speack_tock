@@ -10,6 +10,14 @@ export class User {
 
     @Column()
     @Field(() => String)
+    name: string;
+
+    @Column()
+    @Field(() => String)
+    email: string;
+
+    @Column()
+    @Field(() => String)
     phone: string;
 
     @Column()

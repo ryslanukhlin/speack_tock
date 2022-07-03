@@ -1,0 +1,10 @@
+query getUsers($id: String!) {
+    getUsers(id: $id) {
+        ...UsersNames
+    }
+}
+
+fragment UsersNames on User {
+    id
+    name
+}

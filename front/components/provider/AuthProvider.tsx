@@ -1,16 +1,16 @@
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useSubscription } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { FC, ReactNode, useEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
+import { FC, ReactNode, useEffect } from 'react';
 import { useGetUserLazyQuery } from '../../graphql/generated';
 import { tokenVar } from '../../graphql/store/token';
 import { downloadUserVar } from '../../graphql/store/downloadUser';
 import Spinner from '../Spinner';
 import { userVar } from '../../graphql/store/user';
+import AuthLayout from '../layout/AuthLayout';
 
 type AuthProviderProps = {
     children: ReactNode;
-    protectedPage: boolean;
+    publicPage: boolean;
 };
 
 type User = {
@@ -19,7 +19,7 @@ type User = {
     email: string;
 };
 
-const AuthProvider: FC<AuthProviderProps> = ({ children, protectedPage }) => {
+const AuthProvider: FC<AuthProviderProps> = ({ children, publicPage }) => {
     const router = useRouter();
     const user = useReactiveVar(userVar);
     const token = useReactiveVar(tokenVar);
@@ -33,29 +33,27 @@ const AuthProvider: FC<AuthProviderProps> = ({ children, protectedPage }) => {
             const { data } = await loadingUser();
 
             if (data) {
-                flushSync(() => {
-                    userVar(data.getUser);
-                });
+                userVar(data.getUser);
             }
             downloadUserVar(false);
         }, 0);
     }, [token]);
 
-    if (protectedPage && !user && downloadUserVar()) {
+    if (!publicPage && !user && downloadUserVar()) {
         return <Spinner color="indigo" />;
     }
 
-    if (protectedPage && !user && !downloadUserVar()) {
+    if (!publicPage && !user && !downloadUserVar()) {
         router.push('/login');
         return null;
     }
 
-    if (!protectedPage && user) {
-        router.push('/');
+    if (!!publicPage && user) {
+        router.push('/' + user.id);
         return null;
     }
 
-    return <>{children}</>;
+    return <AuthLayout>{children}</AuthLayout>;
 };
 
 export default AuthProvider;

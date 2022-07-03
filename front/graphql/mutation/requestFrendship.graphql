@@ -1,5 +1,5 @@
-query getUser {
-    getUser {
+mutation requestFrendship($id: String!, $frendId: String!) {
+    requestFrendship(id: $id, frendId: $frendId) {
         id
         phone
         name

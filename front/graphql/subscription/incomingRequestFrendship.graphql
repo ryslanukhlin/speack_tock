@@ -1,5 +1,5 @@
-query getUser {
-    getUser {
+subscription incomingRequestFrendship($roomCode: String!) {
+    incomingRequestFrendship(roomCode: $roomCode) {
         id
         phone
         name

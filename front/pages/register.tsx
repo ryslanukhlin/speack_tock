@@ -131,4 +131,12 @@ export const Register: NextPage = () => {
     );
 };
 
+export async function getStaticProps() {
+    return {
+        props: {
+            public: true,
+        },
+    };
+}
+
 export default Register;

@@ -6,7 +6,7 @@ import '../styles/globals.css';
 const MyApp = ({ Component, pageProps }: AppProps) => {
     return (
         <ClientApolloProvider>
-            <AuthProvider protectedPage={pageProps.protected}>
+            <AuthProvider publicPage={pageProps.public}>
                 <Component {...pageProps} />
             </AuthProvider>
         </ClientApolloProvider>

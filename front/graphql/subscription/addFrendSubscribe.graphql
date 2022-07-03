@@ -1,5 +1,5 @@
-query getUser {
-    getUser {
+subscription addFrendSubscribe($roomCode: String!) {
+    addFrendSubscribe(roomCode: $roomCode) {
         id
         phone
         name

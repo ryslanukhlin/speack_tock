@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -23,4 +23,18 @@ export class User {
     @Column()
     @Field(() => String)
     password: string;
+
+    @Field(() => [User], { defaultValue: [] })
+    @ManyToMany(() => User, (user) => user.outgoingRequestFrendship)
+    incomingRequestFrendship: User[];
+
+    @Field(() => [User], { defaultValue: [] })
+    @ManyToMany(() => User, (user) => user.incomingRequestFrendship)
+    @JoinTable()
+    outgoingRequestFrendship: User[];
+
+    @Field(() => [User], { defaultValue: [] })
+    @ManyToMany(() => User, (user) => user.frends)
+    @JoinTable()
+    frends: User[]
 }

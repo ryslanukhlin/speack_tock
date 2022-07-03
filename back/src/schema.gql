@@ -8,12 +8,20 @@ input AuthInput {
 }
 
 type Mutation {
+  addFrend(frendId: String!, id: String!): User!
   loginUser(authInput: AuthInput!): TokenType!
   registerUser(userInput: UserInput!): User!
+  requestFrendship(frendId: String!, id: String!): User!
 }
 
 type Query {
   getUser: User!
+  getUsers(id: String!): [User!]!
+}
+
+type Subscription {
+  addFrendSubscribe(roomCode: String!): User!
+  incomingRequestFrendship(roomCode: String!): User!
 }
 
 type TokenType {
@@ -22,8 +30,11 @@ type TokenType {
 
 type User {
   email: String!
+  frends: [User!]!
   id: ID!
+  incomingRequestFrendship: [User!]!
   name: String!
+  outgoingRequestFrendship: [User!]!
   password: String!
   phone: String!
 }

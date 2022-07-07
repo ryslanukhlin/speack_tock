@@ -1,17 +1,5 @@
 mutation requestFrendship($id: String!, $frendId: String!) {
     requestFrendship(id: $id, frendId: $frendId) {
-        id
-        phone
-        name
-        email
-        outgoingRequestFrendship {
-            id
-        }
-        incomingRequestFrendship {
-            id
-        }
-        frends {
-            id
-        }
+        ...UserFragment
     }
 }

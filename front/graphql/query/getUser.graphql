@@ -1,17 +1,5 @@
 query getUser {
     getUser {
-        id
-        phone
-        name
-        email
-        outgoingRequestFrendship {
-            id
-        }
-        incomingRequestFrendship {
-            id
-        }
-        frends {
-            id
-        }
+        ...UserFragment
     }
 }

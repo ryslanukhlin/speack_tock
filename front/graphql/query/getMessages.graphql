@@ -1,0 +1,10 @@
+query getMessages($roomId: String!) {
+    getMessages(roomId: $roomId) {
+        id
+        text
+        dateCreated
+        user {
+            id
+        }
+    }
+}

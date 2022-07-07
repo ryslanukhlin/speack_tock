@@ -1,0 +1,26 @@
+fragment UserFragment on User {
+    id
+    phone
+    name
+    email
+    outgoingRequestFrendship {
+        id
+    }
+    incomingRequestFrendship {
+        id
+    }
+    frends {
+        id
+        name
+        email
+        phone
+    }
+    rooms {
+        id
+        users {
+            id
+            name
+            phone
+        }
+    }
+}

@@ -1,11 +1,20 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Room } from 'src/chat/model/room.model';
+import {
+    Column,
+    Entity,
+    Generated,
+    JoinTable,
+    ManyToMany,
+    PrimaryColumn,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class User {
     @Field(() => ID)
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: string;
 
     @Column()
@@ -36,5 +45,9 @@ export class User {
     @Field(() => [User], { defaultValue: [] })
     @ManyToMany(() => User, (user) => user.frends)
     @JoinTable()
-    frends: User[]
+    frends: User[];
+
+    @Field(() => [Room], { defaultValue: [] })
+    @ManyToMany(() => Room, (room) => room.users)
+    rooms: Room[];
 }

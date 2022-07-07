@@ -35,11 +35,11 @@ const SearchContact: NextPage = () => {
     if (loading) return null;
 
     return (
-        <div className="p-4 flex flex-wrap  content-start bg-gray-300 w-full">
+        <div className="p-4 grid grid-cols-8 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-full">
             {data?.getUsers.map((user, index) => (
                 <div
                     key={user.name + index}
-                    className="mb-4 w-[190px] h-[160px] p-4 bg-white rounded mr-2 last:mr-0 flex flex-col items-center">
+                    className="mb-4 col-span-8 sm:col-span-4 lg:col-span-1 p-4 bg-white rounded mr-2 last:mr-0 flex flex-col items-center">
                     <Image src="/user.webp" width={50} height={50} />
                     <div className="mt-3">{user.name}</div>
                     {authUser?.frends.find((frend) => frend.id === user.id) ? (

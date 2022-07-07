@@ -1,17 +1,5 @@
 subscription addFrendSubscribe($roomCode: String!) {
     addFrendSubscribe(roomCode: $roomCode) {
-        id
-        phone
-        name
-        email
-        outgoingRequestFrendship {
-            id
-        }
-        incomingRequestFrendship {
-            id
-        }
-        frends {
-            id
-        }
+        ...UserFragment
     }
 }

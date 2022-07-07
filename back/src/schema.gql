@@ -7,21 +7,37 @@ input AuthInput {
   phone: String!
 }
 
+type Message {
+  dateCreated: String!
+  id: ID!
+  text: String!
+  user: User!
+}
+
 type Mutation {
   addFrend(frendId: String!, id: String!): User!
   loginUser(authInput: AuthInput!): TokenType!
   registerUser(userInput: UserInput!): User!
   requestFrendship(frendId: String!, id: String!): User!
+  sendMessage(roomCode: String!, text: String!): Message!
 }
 
 type Query {
+  getMessages(roomId: String!): [Message!]!
   getUser: User!
   getUsers(id: String!): [User!]!
+}
+
+type Room {
+  id: ID!
+  messages: [Message!]!
+  users: [User!]!
 }
 
 type Subscription {
   addFrendSubscribe(roomCode: String!): User!
   incomingRequestFrendship(roomCode: String!): User!
+  sendMessageWatcher(roomCode: String!): Message!
 }
 
 type TokenType {
@@ -37,6 +53,7 @@ type User {
   outgoingRequestFrendship: [User!]!
   password: String!
   phone: String!
+  rooms: [Room!]!
 }
 
 input UserInput {

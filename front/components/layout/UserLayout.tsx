@@ -1,9 +1,4 @@
-import { FC, ReactNode, useEffect } from 'react';
-import {
-    useAddFrendSubscribeSubscription,
-    useIncomingRequestFrendshipSubscription,
-} from '../../graphql/generated';
-import { userVar } from '../../graphql/store/user';
+import { FC, ReactNode } from 'react';
 import Nav from '../Nav';
 
 type UserLayoutProps = {
@@ -11,30 +6,12 @@ type UserLayoutProps = {
 };
 
 const UserLayout: FC<UserLayoutProps> = ({ children }) => {
-    const { data: dataAddInc, loading: loadingAddInc } = useIncomingRequestFrendshipSubscription({
-        variables: { roomCode: userVar()?.id! },
-    });
-
-    useEffect(() => {
-        if (dataAddInc && !loadingAddInc) {
-            userVar(dataAddInc.incomingRequestFrendship);
-        }
-    }, [dataAddInc, loadingAddInc]);
-
-    const { data: dataAddFrend, loading: loadingAddFrend } = useAddFrendSubscribeSubscription({
-        variables: { roomCode: userVar()?.id! },
-    });
-
-    useEffect(() => {
-        if (dataAddFrend && !loadingAddFrend) {
-            userVar(dataAddFrend.addFrendSubscribe);
-        }
-    }, [dataAddFrend, loadingAddFrend]);
-
     return (
         <div className="flex">
             <Nav />
-            {children}
+            <div className="flex flex-wrap  content-start bg-gray-300 w-full ml-[300px] min-h-[100vh]">
+                {children}
+            </div>
         </div>
     );
 };

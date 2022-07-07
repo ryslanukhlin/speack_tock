@@ -1,4 +1,4 @@
-import { useReactiveVar, useSubscription } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useEffect } from 'react';
 import { useGetUserLazyQuery } from '../../graphql/generated';
@@ -7,16 +7,11 @@ import { downloadUserVar } from '../../graphql/store/downloadUser';
 import Spinner from '../Spinner';
 import { userVar } from '../../graphql/store/user';
 import AuthLayout from '../layout/AuthLayout';
+import useSubscribeDate from '../../hooks/useSubscribeDate';
 
 type AuthProviderProps = {
     children: ReactNode;
     publicPage: boolean;
-};
-
-type User = {
-    phone: string;
-    name: string;
-    email: string;
 };
 
 const AuthProvider: FC<AuthProviderProps> = ({ children, publicPage }) => {
@@ -26,6 +21,8 @@ const AuthProvider: FC<AuthProviderProps> = ({ children, publicPage }) => {
     const [loadingUser] = useGetUserLazyQuery({
         errorPolicy: 'all',
     });
+
+    useSubscribeDate();
 
     useEffect(() => {
         setTimeout(async () => {

@@ -1,17 +1,5 @@
 mutation addFrend($id: String!, $frendId: String!) {
     addFrend(id: $id, frendId: $frendId) {
-        id
-        phone
-        name
-        email
-        outgoingRequestFrendship {
-            id
-        }
-        incomingRequestFrendship {
-            id
-        }
-        frends {
-            id
-        }
+        ...UserFragment
     }
 }

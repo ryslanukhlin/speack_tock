@@ -1,0 +1,10 @@
+subscription sendMessageWatcher($roomCode: String!) {
+    sendMessageWatcher(roomCode: $roomCode) {
+        id
+        dateCreated
+        text
+        user {
+            id
+        }
+    }
+}

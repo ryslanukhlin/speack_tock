@@ -20,12 +20,21 @@ export type AuthInput = {
   phone: Scalars['String'];
 };
 
+export type Message = {
+  __typename?: 'Message';
+  dateCreated: Scalars['Int'];
+  id: Scalars['ID'];
+  text: Scalars['String'];
+  user: User;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addFrend: User;
   loginUser: TokenType;
   registerUser: User;
   requestFrendship: User;
+  sendMessage: Message;
 };
 
 
@@ -50,10 +59,22 @@ export type MutationRequestFrendshipArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationSendMessageArgs = {
+  roomCode: Scalars['String'];
+  text: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  getMessages: Array<Message>;
   getUser: User;
   getUsers: Array<User>;
+};
+
+
+export type QueryGetMessagesArgs = {
+  roomId: Scalars['String'];
 };
 
 
@@ -61,10 +82,18 @@ export type QueryGetUsersArgs = {
   id: Scalars['String'];
 };
 
+export type Room = {
+  __typename?: 'Room';
+  id: Scalars['ID'];
+  messages: Array<Message>;
+  users: Array<User>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   addFrendSubscribe: User;
   incomingRequestFrendship: User;
+  sendMessageWatcher: Message;
 };
 
 
@@ -74,6 +103,11 @@ export type SubscriptionAddFrendSubscribeArgs = {
 
 
 export type SubscriptionIncomingRequestFrendshipArgs = {
+  roomCode: Scalars['String'];
+};
+
+
+export type SubscriptionSendMessageWatcherArgs = {
   roomCode: Scalars['String'];
 };
 
@@ -92,6 +126,7 @@ export type User = {
   outgoingRequestFrendship: Array<User>;
   password: Scalars['String'];
   phone: Scalars['String'];
+  rooms: Array<Room>;
 };
 
 export type UserInput = {
@@ -101,13 +136,15 @@ export type UserInput = {
   phone: Scalars['String'];
 };
 
+export type UserFragmentFragment = { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: string }>, rooms: Array<{ __typename?: 'Room', id: string, users: Array<{ __typename?: 'User', id: string, name: string, phone: string }> }> };
+
 export type AddFrendMutationVariables = Exact<{
   id: Scalars['String'];
   frendId: Scalars['String'];
 }>;
 
 
-export type AddFrendMutation = { __typename?: 'Mutation', addFrend: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string }> } };
+export type AddFrendMutation = { __typename?: 'Mutation', addFrend: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: string }>, rooms: Array<{ __typename?: 'Room', id: string, users: Array<{ __typename?: 'User', id: string, name: string, phone: string }> }> } };
 
 export type LoginUserMutationVariables = Exact<{
   phone: Scalars['String'];
@@ -133,12 +170,27 @@ export type RequestFrendshipMutationVariables = Exact<{
 }>;
 
 
-export type RequestFrendshipMutation = { __typename?: 'Mutation', requestFrendship: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string }> } };
+export type RequestFrendshipMutation = { __typename?: 'Mutation', requestFrendship: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: string }>, rooms: Array<{ __typename?: 'Room', id: string, users: Array<{ __typename?: 'User', id: string, name: string, phone: string }> }> } };
+
+export type SendMessageMutationVariables = Exact<{
+  text: Scalars['String'];
+  roomCode: Scalars['String'];
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage: { __typename?: 'Message', id: string } };
+
+export type GetMessagesQueryVariables = Exact<{
+  roomId: Scalars['String'];
+}>;
+
+
+export type GetMessagesQuery = { __typename?: 'Query', getMessages: Array<{ __typename?: 'Message', id: string, text: string, dateCreated: number, user: { __typename?: 'User', id: string } }> };
 
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string }> } };
+export type GetUserQuery = { __typename?: 'Query', getUser: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: string }>, rooms: Array<{ __typename?: 'Room', id: string, users: Array<{ __typename?: 'User', id: string, name: string, phone: string }> }> } };
 
 export type GetUsersQueryVariables = Exact<{
   id: Scalars['String'];
@@ -154,15 +206,50 @@ export type AddFrendSubscribeSubscriptionVariables = Exact<{
 }>;
 
 
-export type AddFrendSubscribeSubscription = { __typename?: 'Subscription', addFrendSubscribe: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string }> } };
+export type AddFrendSubscribeSubscription = { __typename?: 'Subscription', addFrendSubscribe: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: string }>, rooms: Array<{ __typename?: 'Room', id: string, users: Array<{ __typename?: 'User', id: string, name: string, phone: string }> }> } };
 
 export type IncomingRequestFrendshipSubscriptionVariables = Exact<{
   roomCode: Scalars['String'];
 }>;
 
 
-export type IncomingRequestFrendshipSubscription = { __typename?: 'Subscription', incomingRequestFrendship: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string }> } };
+export type IncomingRequestFrendshipSubscription = { __typename?: 'Subscription', incomingRequestFrendship: { __typename?: 'User', id: string, phone: string, name: string, email: string, outgoingRequestFrendship: Array<{ __typename?: 'User', id: string }>, incomingRequestFrendship: Array<{ __typename?: 'User', id: string }>, frends: Array<{ __typename?: 'User', id: string, name: string, email: string, phone: string }>, rooms: Array<{ __typename?: 'Room', id: string, users: Array<{ __typename?: 'User', id: string, name: string, phone: string }> }> } };
 
+export type SendMessageWatcherSubscriptionVariables = Exact<{
+  roomCode: Scalars['String'];
+}>;
+
+
+export type SendMessageWatcherSubscription = { __typename?: 'Subscription', sendMessageWatcher: { __typename?: 'Message', id: string, dateCreated: number, text: string, user: { __typename?: 'User', id: string } } };
+
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  id
+  phone
+  name
+  email
+  outgoingRequestFrendship {
+    id
+  }
+  incomingRequestFrendship {
+    id
+  }
+  frends {
+    id
+    name
+    email
+    phone
+  }
+  rooms {
+    id
+    users {
+      id
+      name
+      phone
+    }
+  }
+}
+    `;
 export const UsersNamesFragmentDoc = gql`
     fragment UsersNames on User {
   id
@@ -172,22 +259,10 @@ export const UsersNamesFragmentDoc = gql`
 export const AddFrendDocument = gql`
     mutation addFrend($id: String!, $frendId: String!) {
   addFrend(id: $id, frendId: $frendId) {
-    id
-    phone
-    name
-    email
-    outgoingRequestFrendship {
-      id
-    }
-    incomingRequestFrendship {
-      id
-    }
-    frends {
-      id
-    }
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 export type AddFrendMutationFn = Apollo.MutationFunction<AddFrendMutation, AddFrendMutationVariables>;
 
 /**
@@ -290,22 +365,10 @@ export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUse
 export const RequestFrendshipDocument = gql`
     mutation requestFrendship($id: String!, $frendId: String!) {
   requestFrendship(id: $id, frendId: $frendId) {
-    id
-    phone
-    name
-    email
-    outgoingRequestFrendship {
-      id
-    }
-    incomingRequestFrendship {
-      id
-    }
-    frends {
-      id
-    }
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 export type RequestFrendshipMutationFn = Apollo.MutationFunction<RequestFrendshipMutation, RequestFrendshipMutationVariables>;
 
 /**
@@ -333,25 +396,87 @@ export function useRequestFrendshipMutation(baseOptions?: Apollo.MutationHookOpt
 export type RequestFrendshipMutationHookResult = ReturnType<typeof useRequestFrendshipMutation>;
 export type RequestFrendshipMutationResult = Apollo.MutationResult<RequestFrendshipMutation>;
 export type RequestFrendshipMutationOptions = Apollo.BaseMutationOptions<RequestFrendshipMutation, RequestFrendshipMutationVariables>;
-export const GetUserDocument = gql`
-    query getUser {
-  getUser {
+export const SendMessageDocument = gql`
+    mutation sendMessage($text: String!, $roomCode: String!) {
+  sendMessage(text: $text, roomCode: $roomCode) {
     id
-    phone
-    name
-    email
-    outgoingRequestFrendship {
-      id
-    }
-    incomingRequestFrendship {
-      id
-    }
-    frends {
+  }
+}
+    `;
+export type SendMessageMutationFn = Apollo.MutationFunction<SendMessageMutation, SendMessageMutationVariables>;
+
+/**
+ * __useSendMessageMutation__
+ *
+ * To run a mutation, you first call `useSendMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendMessageMutation, { data, loading, error }] = useSendMessageMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      roomCode: // value for 'roomCode'
+ *   },
+ * });
+ */
+export function useSendMessageMutation(baseOptions?: Apollo.MutationHookOptions<SendMessageMutation, SendMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendMessageMutation, SendMessageMutationVariables>(SendMessageDocument, options);
+      }
+export type SendMessageMutationHookResult = ReturnType<typeof useSendMessageMutation>;
+export type SendMessageMutationResult = Apollo.MutationResult<SendMessageMutation>;
+export type SendMessageMutationOptions = Apollo.BaseMutationOptions<SendMessageMutation, SendMessageMutationVariables>;
+export const GetMessagesDocument = gql`
+    query getMessages($roomId: String!) {
+  getMessages(roomId: $roomId) {
+    id
+    text
+    dateCreated
+    user {
       id
     }
   }
 }
     `;
+
+/**
+ * __useGetMessagesQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesQuery({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useGetMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+      }
+export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+        }
+export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
+export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
+export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;
+export const GetUserDocument = gql`
+    query getUser {
+  getUser {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useGetUserQuery__
@@ -417,22 +542,10 @@ export type GetUsersQueryResult = Apollo.QueryResult<GetUsersQuery, GetUsersQuer
 export const AddFrendSubscribeDocument = gql`
     subscription addFrendSubscribe($roomCode: String!) {
   addFrendSubscribe(roomCode: $roomCode) {
-    id
-    phone
-    name
-    email
-    outgoingRequestFrendship {
-      id
-    }
-    incomingRequestFrendship {
-      id
-    }
-    frends {
-      id
-    }
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useAddFrendSubscribeSubscription__
@@ -459,22 +572,10 @@ export type AddFrendSubscribeSubscriptionResult = Apollo.SubscriptionResult<AddF
 export const IncomingRequestFrendshipDocument = gql`
     subscription incomingRequestFrendship($roomCode: String!) {
   incomingRequestFrendship(roomCode: $roomCode) {
-    id
-    phone
-    name
-    email
-    outgoingRequestFrendship {
-      id
-    }
-    incomingRequestFrendship {
-      id
-    }
-    frends {
-      id
-    }
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useIncomingRequestFrendshipSubscription__
@@ -498,3 +599,38 @@ export function useIncomingRequestFrendshipSubscription(baseOptions: Apollo.Subs
       }
 export type IncomingRequestFrendshipSubscriptionHookResult = ReturnType<typeof useIncomingRequestFrendshipSubscription>;
 export type IncomingRequestFrendshipSubscriptionResult = Apollo.SubscriptionResult<IncomingRequestFrendshipSubscription>;
+export const SendMessageWatcherDocument = gql`
+    subscription sendMessageWatcher($roomCode: String!) {
+  sendMessageWatcher(roomCode: $roomCode) {
+    id
+    dateCreated
+    text
+    user {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useSendMessageWatcherSubscription__
+ *
+ * To run a query within a React component, call `useSendMessageWatcherSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSendMessageWatcherSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSendMessageWatcherSubscription({
+ *   variables: {
+ *      roomCode: // value for 'roomCode'
+ *   },
+ * });
+ */
+export function useSendMessageWatcherSubscription(baseOptions: Apollo.SubscriptionHookOptions<SendMessageWatcherSubscription, SendMessageWatcherSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<SendMessageWatcherSubscription, SendMessageWatcherSubscriptionVariables>(SendMessageWatcherDocument, options);
+      }
+export type SendMessageWatcherSubscriptionHookResult = ReturnType<typeof useSendMessageWatcherSubscription>;
+export type SendMessageWatcherSubscriptionResult = Apollo.SubscriptionResult<SendMessageWatcherSubscription>;

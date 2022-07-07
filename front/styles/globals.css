@@ -80,3 +80,7 @@
         transform: rotate(360deg);
     }
 }
+
+.widthChat {
+    width: calc(100% - 299px);
+}
